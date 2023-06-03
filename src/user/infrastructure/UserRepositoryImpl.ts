@@ -43,24 +43,34 @@ export class RepositoryImpl implements UserRepository {
 		} catch (error) {
 			if (error instanceof Error) return error;
 		}
-        return new Error("Algo salio mal")
+		return new Error('Algo salio mal');
 	}
 	async login(email: string, password: string): Promise<User | Error> {
 		try {
-			const user = await UserEntity.findOneBy({email: email})
-			
-			if(user){
-				if(bcrypt.compareSync(password, user.password)){
-					return user
-				}else{
-					throw new Error('Contraseña incorrecta')
+			const user = await UserEntity.findOneBy({ email: email });
+			console.log(user);
+			if (user) {
+				const isMatch = bcrypt.compareSync(password, user.password);
+				if (isMatch) {
+					return new User(
+						user.id,
+						user.name,
+						user.username,
+						user.email,
+						user.password,
+						user.location,
+						user.birth,
+						user.gamertag
+					);
+				} else {
+					throw new Error('Contraseña incorrecta');
 				}
 			}
 		} catch (error) {
-			if(error instanceof Error) return error
+			if (error instanceof Error) return error;
 		}
-		
-		return new Error('Algo salio mal')
+
+		return new Error('Algo salio mal');
 	}
 	async getUser(): Promise<User | null> {
 		throw new Error('Method not implemented.');
