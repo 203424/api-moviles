@@ -1,5 +1,10 @@
 import { Router } from 'express';
 
-// import {} from './dependencies';
+import { registerController } from './dependencies';
 
 export const userRouter = Router();
+
+userRouter.post(
+	'/user/register/',
+	registerController.run.bind(registerController)
+);
